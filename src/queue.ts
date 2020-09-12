@@ -2,10 +2,16 @@ import {
   Promise
 } from "es6-promise";
 
+type runnableFn = ()=>any
+type resolveFn = (value: any)=>any
+type rejectFn = (error: any)=>any
+
 class Queue {
-  line = [];
+  line: Array<[
+    runnableFn, resolveFn, rejectFn
+  ]> = [];
   running = false;
-  run(fn: ()=>any){
+  run(fn: runnableFn){
     const runNext = ()=>{
       if(this.line.length){
         var fnArgs = this.line.shift();
@@ -14,7 +20,9 @@ class Queue {
         this.running = false
       }
     }
-    const runFn = (fn, res, rej)=>{
+    const runFn = (
+      fn: runnableFn, res: resolveFn, rej: rejectFn
+    )=>{
       return Promise.resolve().then(()=>{
         return fn()
       }).then((v)=>{
@@ -28,7 +36,7 @@ class Queue {
 
     return new Promise((res, rej)=>{
       if(this.running){
-        this.line.push(fn, res, rej);
+        this.line.push([fn, res, rej]);
       }else{
         this.running = true
         runFn(fn, res, rej);
