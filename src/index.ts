@@ -1,6 +1,6 @@
 import {
   Queue
-} from "./queue";
+} from "./Queue";
 
 export {
   Queue
