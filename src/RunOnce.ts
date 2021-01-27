@@ -33,7 +33,7 @@ class RunOnce {
         this.value = value;
         this.isError = false;
         this.listeners.forEach((resrej)=>{
-          res[0](value)
+          resrej[0](value)
         })
         this.listeners = [];
       }, (error)=>{
@@ -41,7 +41,7 @@ class RunOnce {
         this.value = error;
         this.isError = true;
         this.listeners.forEach((resrej)=>{
-          res[1](error)
+          resrej[1](error)
         })
         this.listeners = [];
       })
