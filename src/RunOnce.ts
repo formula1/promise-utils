@@ -27,7 +27,7 @@ class RunOnce {
         return;
       }
       this.isRunning = true;
-      Promise.resolve(()=>{
+      Promise.resolve().then(()=>{
         return this.functionToRun();
       }).then((value)=>{
         this.isFinished = true;
