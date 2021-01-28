@@ -4,7 +4,7 @@ type FunctionToRun = ()=>any;
 
 class RunOnce {
   isRunning: boolean = false;
-  isFinsihed: boolean = false;
+  isFinished: boolean = false;
   value: any
   isError: boolean = false;
   functionToRun: FunctionToRun;
@@ -15,12 +15,13 @@ class RunOnce {
   }
   run(){
     return new Promise((res, rej)=>{
-      if(this.isFinsihed){
+      if(this.isFinished){
         if(this.isError){
           return rej(this.value)
         }
         return res(this.value)
       }
+
       this.listeners.push([res, rej]);
       if(this.isRunning){
         return;
@@ -29,7 +30,7 @@ class RunOnce {
       Promise.resolve(()=>{
         return this.functionToRun();
       }).then((value)=>{
-        this.isFinsihed = true;
+        this.isFinished = true;
         this.value = value;
         this.isError = false;
         this.listeners.forEach((resrej)=>{
@@ -37,7 +38,7 @@ class RunOnce {
         })
         this.listeners = [];
       }, (error)=>{
-        this.isFinsihed = true;
+        this.isFinished = true;
         this.value = error;
         this.isError = true;
         this.listeners.forEach((resrej)=>{
